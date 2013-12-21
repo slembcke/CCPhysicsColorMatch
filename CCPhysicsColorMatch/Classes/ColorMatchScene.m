@@ -1,0 +1,245 @@
+/*
+ * CCPhysics Color Match Example
+ *
+ * Copyright (c) 2013 Scott Lembcke
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+#import "cocos2d.h"
+#import "ObjectAL.h"
+
+#import "ColorMatchScene.h"
+#import "Ball.h"
+
+
+enum Z_ORDER {
+	Z_BACKGROUND,
+	Z_BALLS,
+	Z_PARTICLES,
+	Z_FOREGROUND,
+};
+
+
+@implementation ColorMatchScene
+{
+	// Scenery sprites.
+	CCSprite *_foreground, *_background;
+	
+	// Node that simulates the physics.
+	CCPhysicsNode *_physics;
+	
+	// List of balls in the game.
+	NSMutableArray *_balls;
+	
+	// Number of elapsed fixed timesteps.
+	NSUInteger _ticks;
+	
+	// Cache the particles definition.
+	NSDictionary *_popParticles;
+}
+
+-(id)init
+{
+	if((self = [super init])){
+		_balls = [NSMutableArray array];
+	}
+	
+	return self;
+}
+
+-(void)onEnter
+{
+	[super onEnter];
+	
+	// It's a good practice to do as much initialization work as you can in the -onEnter method instead of -init.
+	// This means that you won't have two full scenes in memory at the same time and Cocos2D can manage memory better.
+	
+	// Load the background sprite
+	_background = [CCSprite spriteWithImageNamed:@"Background.png"];
+	_background.anchorPoint = ccp(0, 0);
+	[self addChild:_background z:Z_BACKGROUND];
+	
+	// Load the foregrund sprite.
+	_foreground = [CCSprite spriteWithImageNamed:@"Foreground.png"];
+	_foreground.anchorPoint = ccp(0, 0);
+	[self addChild:_foreground z:Z_FOREGROUND];
+	
+	_physics = [CCPhysicsNode node];
+	_physics.gravity = ccp(0, -250);
+	
+	// Position the physics origin at the corner of the playfield.
+	_physics.position = ccp(68, 34);
+	
+	// You can enable debug drawing if you want CCPhysics to highlight collision shapes for you.
+	_physics.debugDraw = YES;
+	
+	// Use the scene as the delegate for collision events.
+	// See the collision methods below.
+	_physics.collisionDelegate = self;
+	
+	[self addChild:_physics z:Z_BALLS];
+	
+	// Make a node to attach the physics body for the "bin" the balls fall into.
+	CCNode *bin = [CCNode node];
+	// Make a body with a hollow rectangular shape.
+	// Polyline based bodies defualt to being "static" which means that they don't move.
+	CGRect binRect = CGRectMake(0, 0, 430, 500);
+	bin.physicsBody = [CCPhysicsBody bodyWithPolylineFromRect:binRect cornerRadius:0];
+	
+	// To make the bin active, just add it as a child to the CCPhysicsNode.
+	[_physics addChild:bin];
+	
+	NSString *path = [[CCFileUtils sharedFileUtils] fullPathFromRelativePath:@"pop.plist"];
+	_popParticles = [NSDictionary dictionaryWithContentsOfFile:path];
+}
+
+// This method should look suspiciously similar to addBall:
+-(void)removeBall:(Ball *)ball
+{
+	[_physics removeChild:ball];
+	[_balls removeObject:ball];
+	
+	// Draw the confetti particles whenever a ball is removed.
+	CCParticleSystem *particles = [[CCParticleSystem alloc] initWithDictionary:_popParticles];
+	particles.position = ball.position;
+	particles.autoRemoveOnFinish = TRUE;
+	[self addChild:particles z:Z_PARTICLES];
+}
+
+//MARK: Collision Delegate Methods
+
+// This method is called each fixed timestep for any two CCPhysicsBodies that both have a collision type of @"red".
+// The names of the last two parameters decide what collision types it works on.
+-(BOOL)ccPhysicsCollisionPreSolve:(CCPhysicsCollisionPair *)pair red:(Ball *)ballA red:(Ball *)ballB
+{
+	[self markPair:ballA and:ballB];
+	
+	// By returning NO, you can tell CCPhysics to ignore the collision for this fixed timestep.
+	return YES;
+}
+
+// This one works only when orange balls collide.
+-(BOOL)ccPhysicsCollisionPreSolve:(CCPhysicsCollisionPair *)pair orange:(Ball *)ballA orange:(Ball *)ballB
+{
+	[self markPair:ballA and:ballB];
+	return YES;
+}
+
+// Yellow balls... you get the idea.
+-(BOOL)ccPhysicsCollisionPreSolve:(CCPhysicsCollisionPair *)pair yellow:(Ball *)ballA yellow:(Ball *)ballB
+{
+	[self markPair:ballA and:ballB];
+	return YES;
+}
+
+// The two types don't need to match of course.
+-(BOOL)ccPhysicsCollisionPreSolve:(CCPhysicsCollisionPair *)pair green:(Ball *)ballA green:(Ball *)ballB
+{
+	[self markPair:ballA and:ballB];
+	return YES;
+}
+
+-(BOOL)ccPhysicsCollisionPreSolve:(CCPhysicsCollisionPair *)pair blue:(Ball *)ballA blue:(Ball *)ballB
+{
+	[self markPair:ballA and:ballB];
+	return YES;
+}
+
+-(BOOL)ccPhysicsCollisionPreSolve:(CCPhysicsCollisionPair *)pair violet:(Ball *)ballA violet:(Ball *)ballB
+{
+	[self markPair:ballA and:ballB];
+	return YES;
+}
+
+// This is the method that is called every time Chipmunk detects a collision between two like color balls.
+-(void)markPair:(Ball *)ballA and:(Ball *)ballB
+{
+	// This is half of the implementation of the disjoint set forest algorithm.
+	// The other half is in the Ball.component* properties.
+	// I won't further explain the algorithm here, but it's one of my favorites.
+	// I use it within Chipmunk itself to find groups of sleeping objects.
+	// You can find more information here: http://en.wikipedia.org/wiki/Disjoint_set_forest#Disjoint-set_forests
+	
+	Ball *rootA = ballA.componentRoot;
+	Ball *rootB = ballB.componentRoot;
+	
+	if(rootA != rootB){
+		// Merge the two component trees.
+		rootA.componentRoot = rootB.componentRoot;
+		rootA.componentCount = rootB.componentCount = rootA.componentCount + rootB.componentCount;
+	}
+}
+
+
+//MARK: Game Loop Methods.
+
+// Put stuff here that you want Cocos2D to call once per frame.
+// Sometimes frames take different amounts of time to process.
+// Ex: updating sprites, animating things for rendering, etc.
+-(void)update:(CCTime)delta
+{
+	// Don't actually have anything to put here...
+}
+
+// Put stuff here like that you want Cocos2D to call at a consistent rate.
+// Ex: Game logic, physics code, etc.
+-(void)fixedUpdate:(CCTime)delta
+{
+	// First, let's check for groups of 4 or more like colored balls.
+	// Technically we are checking the results from the last fixed timestep, but that's okay.
+	// In future versions of Cocos2D there might be an event that is called after physics is simulated.
+	
+	// Look for balls in components with 4 or more balls and remove them.
+	// Note that I'm iterating a copy of the _balls array.
+	// You can't remove objects from an array while iterating it.
+	for(Ball *ball in [_balls copy]){
+		// Get the component's root and check the count.
+		Ball *root = ball.componentRoot;
+		if(root.componentCount >= 4){
+			[self removeBall:ball];
+			
+			// Play a pop noise.
+			int half_steps = (arc4random()%(2*4 + 1) - 4);
+			float pitch = pow(2.0f, half_steps/12.0f);
+			[[OALSimpleAudio sharedInstance] playEffect:@"ploop.wav" volume:1.0 pitch:pitch pan:0 loop:NO];
+		}
+	}
+	
+	// Add a ball every 6 ticks if the playfield doesn't have enough balls.
+	if(_ticks%6 == 0 && _balls.count < 100){
+		Ball *ball = [Ball node];
+		
+		// Give it a random starting position.
+		ball.position = ccp(40 + 350*CCRANDOM_0_1(), 400);
+		
+		[_balls addObject:ball];
+		[_physics addChild:ball];
+	}
+	
+	// Reset the component properties
+	for(Ball *ball in _balls){
+		ball.componentCount = 1;
+		ball.componentRoot = ball;
+	}
+	
+	_ticks++;
+}
+
+@end
