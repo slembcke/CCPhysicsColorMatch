@@ -54,9 +54,9 @@
 		// Keep in mind that if you resize the object the mass is kept constant and the density will change.
 		body.density = 1.0;
 		
-		// Give the body some friction. 0.7 is a good go-to number if you need a guess.
+		// Give the body some friction. 0.7 is a good go-to number if you need a starting guess.
 		// Values over 1.0 are ok too.
-		body.friction = 0.7;
+		body.friction = 0.5;
 		
 		// The collision type is a string that is used to figuer out which collision delegate method to call.
 		// See ColorMatchScene.m for more information.
@@ -77,10 +77,12 @@
 	return [[Ball alloc] init];
 }
 
-//-(BOOL)hitTestWithWorldPos:(CGPoint)pos
-//{
-//	return 
-//}
+// If you want to override touch detection. 
+-(BOOL)hitTestWithWorldPos:(CGPoint)pos
+{
+	float radius = self.contentSize.width/2.0;
+	return (ccpDistanceSQ([self convertToNodeSpace:pos], ccp(radius, radius)) < radius*radius);
+}
 
 -(void)touchBegan:(UITouch *)touch withEvent:(UIEvent *)event
 {

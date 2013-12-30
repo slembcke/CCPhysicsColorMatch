@@ -45,6 +45,9 @@ enum Z_ORDER {
 	// Node that simulates the physics.
 	CCPhysicsNode *_physics;
 	
+	// The boundaries of the "bin" that the balls are trapped inside of.
+	CGRect _binRect;
+	
 	// List of balls in the game.
 	NSMutableArray *_balls;
 	
@@ -84,11 +87,8 @@ enum Z_ORDER {
 	_physics = [CCPhysicsNode node];
 	_physics.gravity = ccp(0, -250);
 	
-	// Position the physics origin at the corner of the playfield.
-	_physics.position = ccp(68, 34);
-	
 	// You can enable debug drawing if you want CCPhysics to highlight collision shapes for you.
-	_physics.debugDraw = YES;
+	_physics.debugDraw = NO;
 	
 	// Use the scene as the delegate for collision events.
 	// See the collision methods below.
@@ -100,8 +100,8 @@ enum Z_ORDER {
 	CCNode *bin = [CCNode node];
 	// Make a body with a hollow rectangular shape.
 	// Polyline based bodies defualt to being "static" which means that they don't move.
-	CGRect binRect = CGRectMake(0, 0, 430, 500);
-	bin.physicsBody = [CCPhysicsBody bodyWithPolylineFromRect:binRect cornerRadius:0];
+	_binRect = CGRectMake(68, 34, 430, 500);
+	bin.physicsBody = [CCPhysicsBody bodyWithPolylineFromRect:_binRect cornerRadius:0];
 	
 	// To make the bin active, just add it as a child to the CCPhysicsNode.
 	[_physics addChild:bin];
@@ -195,7 +195,7 @@ enum Z_ORDER {
 // Ex: updating sprites, animating things for rendering, etc.
 -(void)update:(CCTime)delta
 {
-	// Don't actually have anything to put here...
+	// Don't actually have anything to put here. It's just here as an example.
 }
 
 // Put stuff here like that you want Cocos2D to call at a consistent rate.
@@ -227,7 +227,12 @@ enum Z_ORDER {
 		Ball *ball = [Ball node];
 		
 		// Give it a random starting position.
-		ball.position = ccp(40 + 350*CCRANDOM_0_1(), 400);
+		float xmin = CGRectGetMinX(_binRect);
+		float xmax = CGRectGetMaxY(_binRect);
+		float rand = 0.8*CCRANDOM_MINUS1_1();
+		ball.position = ccp((xmin + xmax)/2.0 - (xmin - xmax)/2.0*rand, 400.0);
+		ball.physicsBody.velocity = ccp(100.0*CCRANDOM_MINUS1_1(), 0);
+		ball.physicsBody.angularVelocity = 5.0*CCRANDOM_MINUS1_1();
 		
 		[_balls addObject:ball];
 		[_physics addChild:ball];

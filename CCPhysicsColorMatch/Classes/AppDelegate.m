@@ -32,28 +32,6 @@
 
 -(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-	// TODO
-	CCFileUtils *sharedFileUtils = [CCFileUtils sharedFileUtils];
-
-	sharedFileUtils.suffixesDict = [@{
-		CCFileUtilsSuffixiPad: @"-ipad",
-		CCFileUtilsSuffixiPadHD: @"-ipadhd",
-		CCFileUtilsSuffixiPhone: @"",
-		CCFileUtilsSuffixiPhoneHD: @"-hd",
-		CCFileUtilsSuffixiPhone5: @"-iphone5",
-		CCFileUtilsSuffixiPhone5HD: @"-iphone5hd",
-		CCFileUtilsSuffixDefault: @"",
-	} mutableCopy];
-
-	sharedFileUtils.searchPath = @[
-		[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Resources-shared"],
-		[[NSBundle mainBundle] resourcePath],
-	];
-	
-	sharedFileUtils.enableiPhoneResourcesOniPad = YES;
-	sharedFileUtils.searchMode = CCFileUtilsSearchModeSuffix;
-	[sharedFileUtils buildSearchResolutionsOrder];
-
 	[self setupCocos2dWithOptions:@{
 		// Use v3's new fixed size screen mode to make it easier to support multiple device scales and resolutions.
 		// It sets up Cocos2D with a 568x384 point "design size".
@@ -63,14 +41,13 @@
 		CCSetupScreenMode: CCScreenModeFixed,
 		// Don't show the stats (fps, draw call count, etc) counter.
 		CCSetupHideDebugStats: @YES,
+		// Use a fast fixed update interval for higher quality physics.
+		CCSetupFixudUpdateInterval: @(1.0/60.0),
 		
-		// Examples of other settings you can use. See the documentation for the full list.
+		// Examples of other settings you can use. See CCAppDelegate.h for the full list.
 //		CCSetupScreenOrientation: CCScreenOrientationPortrait,
 //		CCSetupTabletScale2X: @YES,
 	}];
-	
-	// TODO
-	[CCDirector sharedDirector].scheduler.fixedTimeStep = 1.0/120.0;
 	
 	return YES;
 }

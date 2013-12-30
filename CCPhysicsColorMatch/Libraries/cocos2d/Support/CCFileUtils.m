@@ -175,6 +175,7 @@ static CCFileUtils *fileUtils = nil;
 							@"resources-iphone5hd", CCFileUtilsSuffixiPhone5HD,
 							@"", CCFileUtilsSuffixDefault,
 							nil];
+		_enableiPhoneResourcesOniPad = YES;
 
 #elif defined(__CC_PLATFORM_MAC)
 		_suffixesDict = [[NSMutableDictionary alloc] initWithObjectsAndKeys:

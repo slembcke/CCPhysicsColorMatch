@@ -29,7 +29,6 @@
 		D30523481864CB270077640D /* CCAtlasNode.m in Sources */ = {isa = PBXBuildFile; fileRef = D30523471864CB270077640D /* CCAtlasNode.m */; };
 		D305234C1864CB270077640D /* CCClippingNode.m in Sources */ = {isa = PBXBuildFile; fileRef = D305234B1864CB270077640D /* CCClippingNode.m */; };
 		D30523501864CB270077640D /* CCConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = D305234F1864CB270077640D /* CCConfiguration.m */; };
-		D30523531864CB270077640D /* ccDeprecated.m in Sources */ = {isa = PBXBuildFile; fileRef = D30523521864CB270077640D /* ccDeprecated.m */; };
 		D30523571864CB270077640D /* CCDirector.m in Sources */ = {isa = PBXBuildFile; fileRef = D30523561864CB270077640D /* CCDirector.m */; };
 		D305235B1864CB270077640D /* CCDrawingPrimitives.m in Sources */ = {isa = PBXBuildFile; fileRef = D305235A1864CB270077640D /* CCDrawingPrimitives.m */; };
 		D305235E1864CB270077640D /* CCDrawNode.m in Sources */ = {isa = PBXBuildFile; fileRef = D305235D1864CB270077640D /* CCDrawNode.m */; };
@@ -203,6 +202,7 @@
 		D305287B1864FD060077640D /* pop.plist in Resources */ = {isa = PBXBuildFile; fileRef = D305287A1864FD060077640D /* pop.plist */; };
 		D305287D1865079E0077640D /* ploop.wav in Resources */ = {isa = PBXBuildFile; fileRef = D305287C1865079E0077640D /* ploop.wav */; };
 		D305287F1865080A0077640D /* pop.wav in Resources */ = {isa = PBXBuildFile; fileRef = D305287E1865080A0077640D /* pop.wav */; };
+		D3CF29AE1872156700390C5C /* libObjectiveChipmunk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D30522F61864CB270077640D /* libObjectiveChipmunk.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -255,8 +255,6 @@
 		D305234D1864CB270077640D /* ccConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ccConfig.h; path = Libraries/cocos2d/ccConfig.h; sourceTree = "<group>"; };
 		D305234E1864CB270077640D /* CCConfiguration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CCConfiguration.h; path = Libraries/cocos2d/CCConfiguration.h; sourceTree = "<group>"; };
 		D305234F1864CB270077640D /* CCConfiguration.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CCConfiguration.m; path = Libraries/cocos2d/CCConfiguration.m; sourceTree = "<group>"; };
-		D30523511864CB270077640D /* ccDeprecated.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ccDeprecated.h; path = Libraries/cocos2d/ccDeprecated.h; sourceTree = "<group>"; };
-		D30523521864CB270077640D /* ccDeprecated.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ccDeprecated.m; path = Libraries/cocos2d/ccDeprecated.m; sourceTree = "<group>"; };
 		D30523541864CB270077640D /* CCDirector_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CCDirector_Private.h; path = Libraries/cocos2d/CCDirector_Private.h; sourceTree = "<group>"; };
 		D30523551864CB270077640D /* CCDirector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CCDirector.h; path = Libraries/cocos2d/CCDirector.h; sourceTree = "<group>"; };
 		D30523561864CB270077640D /* CCDirector.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CCDirector.m; path = Libraries/cocos2d/CCDirector.m; sourceTree = "<group>"; };
@@ -643,6 +641,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3CF29AE1872156700390C5C /* libObjectiveChipmunk.a in Frameworks */,
 				D30522E71864CB270077640D /* OpenAL.framework in Frameworks */,
 				D30522ED1864CB270077640D /* UIKit.framework in Frameworks */,
 				D30522E31864CB270077640D /* QuartzCore.framework in Frameworks */,
@@ -752,8 +751,6 @@
 				D305234D1864CB270077640D /* ccConfig.h */,
 				D305234E1864CB270077640D /* CCConfiguration.h */,
 				D305234F1864CB270077640D /* CCConfiguration.m */,
-				D30523511864CB270077640D /* ccDeprecated.h */,
-				D30523521864CB270077640D /* ccDeprecated.m */,
 				D30523541864CB270077640D /* CCDirector_Private.h */,
 				D30523551864CB270077640D /* CCDirector.h */,
 				D30523561864CB270077640D /* CCDirector.m */,
@@ -1641,7 +1638,6 @@
 				D30523F01864CB280077640D /* CCTextureCache.m in Sources */,
 				D305241B1864CB280077640D /* CCAppDelegate.m in Sources */,
 				D305241F1864CB280077640D /* CCDirectorMac.m in Sources */,
-				D30523531864CB270077640D /* ccDeprecated.m in Sources */,
 				D30524821864CB280077640D /* ALContext.m in Sources */,
 				D305235E1864CB270077640D /* CCDrawNode.m in Sources */,
 				D305242F1864CB280077640D /* CCFileUtils.m in Sources */,

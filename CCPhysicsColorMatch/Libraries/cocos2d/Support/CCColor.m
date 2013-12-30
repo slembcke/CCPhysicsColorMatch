@@ -154,7 +154,7 @@
     else if (csModel == kCGColorSpaceModelMonochrome)
     {
         float w, a;
-        [color getWhite:&w alpha:&a];
+//        [color getWhite:&w alpha:&a];
         _r = w;
         _g = w;
         _b = w;

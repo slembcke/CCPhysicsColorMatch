@@ -75,19 +75,14 @@
 
 
 @implementation CCScheduledTarget {
-	__weak NSObject<CCSchedulerTarget> *_target;
+	__unsafe_unretained NSObject<CCSchedulerTarget> *_target;
 	CCTimer *_timers;
 }
 
 static void
-InvokeMethods(NSArray *_methods, SEL selector, CCTime dt)
+InvokeMethods(NSArray *methods, SEL selector, CCTime dt)
 {
-	// Ooof. Need to iterate a copy of the methods array in case one is removed in a callback.
-	// TODO A doubly linked list might make more sense instead...
-	NSArray *methods = [_methods copy];
-	
-	for(NSUInteger i=0, count=methods.count; i<count; i++){
-		CCScheduledTarget *scheduledTarget = methods[i];
+	for(CCScheduledTarget *scheduledTarget in [methods copy]){
 		if(!scheduledTarget->_paused) objc_msgSend(scheduledTarget->_target, selector, dt);
 	}
 }
@@ -230,7 +225,6 @@ static CCTimerBlock INVALIDATED_BLOCK = ^(CCTimer *timer){};
 
 
 @implementation CCScheduler {
-//	NSMutableArray *_heap;
 	CFBinaryHeapRef _heap;
 	CFMutableDictionaryRef _scheduledTargets;
 	
@@ -325,15 +319,15 @@ CompareTimers(const void *a, const void *b, void *context)
 	return NSIntegerMax;
 }
 
--(CCTime)fixedTimeStep {return _fixedUpdateTimer.repeatInterval;}
--(void)setFixedTimeStep:(CCTime)fixedTimeStep {_fixedUpdateTimer.repeatInterval = fixedTimeStep;}
+-(CCTime)fixedUpdateInterval {return _fixedUpdateTimer.repeatInterval;}
+-(void)setFixedUpdateInterval:(CCTime)fixedTimeStep {_fixedUpdateTimer.repeatInterval = fixedTimeStep;}
 
 -(CCScheduledTarget *)scheduledTargetForTarget:(NSObject<CCSchedulerTarget> *)target insert:(BOOL)insert
 {
 	// Need to transform nil -> NSNulls.
 	target = (target == nil ? [NSNull null] : target);
 	
-	CCScheduledTarget *scheduledTarget = CFDictionaryGetValue(_scheduledTargets, (__bridge CFTypeRef)target);
+	CCScheduledTarget *scheduledTarget = (__bridge CCScheduledTarget *)CFDictionaryGetValue(_scheduledTargets, (__bridge CFTypeRef)target);
 	if(scheduledTarget == nil && insert){
 		scheduledTarget = [[CCScheduledTarget alloc] initWithTarget:target];
 		CFDictionarySetValue(_scheduledTargets, (__bridge CFTypeRef)target, (__bridge CFTypeRef)scheduledTarget);
@@ -363,7 +357,7 @@ CompareTimers(const void *a, const void *b, void *context)
 	NSAssert(targetTime >= _currentTime, @"Cannot step to a time in the past.");
 	
 	while(CFBinaryHeapGetCount(_heap) > 0){
-		CCTimer *timer = CFBinaryHeapGetMinimum(_heap);
+		CCTimer *timer = (__bridge CCTimer *)CFBinaryHeapGetMinimum(_heap);
 		CCTime invokeTime = timer.invokeTimeInternal;
 		
 		if(invokeTime > targetTime){
