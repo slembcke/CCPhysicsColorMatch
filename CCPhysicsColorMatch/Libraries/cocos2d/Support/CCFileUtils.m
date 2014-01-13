@@ -146,7 +146,7 @@ static CCFileUtils *fileUtils = nil;
 		
 		_bundle = [NSBundle mainBundle];
 
-		_enableiPhoneResourcesOniPad = NO;
+		_enableiPhoneResourcesOniPad = YES;
 		
 		_searchResolutionsOrder = [[NSMutableArray alloc] initWithCapacity:5];
 		
@@ -175,7 +175,6 @@ static CCFileUtils *fileUtils = nil;
 							@"resources-iphone5hd", CCFileUtilsSuffixiPhone5HD,
 							@"", CCFileUtilsSuffixDefault,
 							nil];
-		_enableiPhoneResourcesOniPad = YES;
 
 #elif defined(__CC_PLATFORM_MAC)
 		_suffixesDict = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
@@ -688,7 +687,8 @@ static CCFileUtils *fileUtils = nil;
 	if( ! ret )
 		ret = path;
 	
-	[_removeSuffixCache setObject:ret forKey:path];
+    if (path)
+        [_removeSuffixCache setObject:ret forKey:path];
 	
 	return ret;
 }

@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2008-2010 Ricardo Quesada
  * Copyright (c) 2011 Zynga Inc.
- * Copyright (c) 2013 Scott Lembcke.
+ * Copyright (c) 2013-2014 Cocos2D Authors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -327,7 +327,7 @@ CompareTimers(const void *a, const void *b, void *context)
 	// Need to transform nil -> NSNulls.
 	target = (target == nil ? [NSNull null] : target);
 	
-	CCScheduledTarget *scheduledTarget = (__bridge CCScheduledTarget *)CFDictionaryGetValue(_scheduledTargets, (__bridge CFTypeRef)target);
+	CCScheduledTarget *scheduledTarget = CFDictionaryGetValue(_scheduledTargets, (__bridge CFTypeRef)target);
 	if(scheduledTarget == nil && insert){
 		scheduledTarget = [[CCScheduledTarget alloc] initWithTarget:target];
 		CFDictionarySetValue(_scheduledTargets, (__bridge CFTypeRef)target, (__bridge CFTypeRef)scheduledTarget);
@@ -357,7 +357,7 @@ CompareTimers(const void *a, const void *b, void *context)
 	NSAssert(targetTime >= _currentTime, @"Cannot step to a time in the past.");
 	
 	while(CFBinaryHeapGetCount(_heap) > 0){
-		CCTimer *timer = (__bridge CCTimer *)CFBinaryHeapGetMinimum(_heap);
+		CCTimer *timer = CFBinaryHeapGetMinimum(_heap);
 		CCTime invokeTime = timer.invokeTimeInternal;
 		
 		if(invokeTime > targetTime){

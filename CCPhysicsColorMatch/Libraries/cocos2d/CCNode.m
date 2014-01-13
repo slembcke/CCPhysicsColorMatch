@@ -2,10 +2,9 @@
  * cocos2d for iPhone: http://www.cocos2d-iphone.org
  *
  * Copyright (c) 2009 Valentin Milea
- *
  * Copyright (c) 2008-2010 Ricardo Quesada
  * Copyright (c) 2011 Zynga Inc.
- * Copyright (c) 2013 Lars Birkemose
+ * Copyright (c) 2013-2014 Cocos2D Authors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -73,7 +72,6 @@
 
 // Suppress automatic ivar creation.
 @dynamic runningInActiveScene;
-@dynamic paused;
 
 static inline
 CCPhysicsBody *
@@ -343,25 +341,22 @@ GetPositionFromBody(CCNode *node, CCPhysicsBody *body)
 
 -(void) setContentSize:(CGSize)size
 {
-	if( ! CGSizeEqualToSize(size, _contentSize) ) {
+	if( ! CGSizeEqualToSize(size, _contentSize) )
+    {
 		_contentSize = size;
-        
-        CGSize contentSizeInPoints = self.contentSizeInPoints;
-		_anchorPointInPoints = ccp( contentSizeInPoints.width * _anchorPoint.x, contentSizeInPoints.height * _anchorPoint.y );
-		_isTransformDirty = _isInverseDirty = YES;
-        
-        if ([_parent isKindOfClass:[CCLayout class]])
-        {
-            CCLayout* layout = (CCLayout*)_parent;
-            [layout needsLayout];
-        }
+        [self contentSizeChanged];
 	}
 }
 
 - (void) setContentSizeType:(CCSizeType)contentSizeType
 {
     _contentSizeType = contentSizeType;
-    
+    [self contentSizeChanged];
+}
+
+- (void) contentSizeChanged
+{
+    // Update children
     CGSize contentSizeInPoints = self.contentSizeInPoints;
     _anchorPointInPoints = ccp( contentSizeInPoints.width * _anchorPoint.x, contentSizeInPoints.height * _anchorPoint.y );
     _isTransformDirty = _isInverseDirty = YES;
@@ -370,6 +365,16 @@ GetPositionFromBody(CCNode *node, CCPhysicsBody *body)
     {
         CCLayout* layout = (CCLayout*)_parent;
         [layout needsLayout];
+    }
+    
+    // Update the children (if needed)
+    for (CCNode* child in _children)
+    {
+        if (!CCPositionTypeIsBasicPoints(child->_positionType))
+        {
+            // This is a position type affected by content size
+            child->_isTransformDirty = _isInverseDirty = YES;
+        }
     }
 }
 
@@ -615,13 +620,10 @@ GetPositionFromBody(CCNode *node, CCPhysicsBody *body)
 static void
 RecursivelyIncrementPausedAncestors(CCNode *node, int increment)
 {
-	NSArray *children = node->_children;
-	for(NSUInteger i=0, count=children.count; i<count; i++){
-		CCNode *child = children[i];
-		
-		BOOL wasRunning = node.runningInActiveScene;
+	for(CCNode *child in node->_children){
+		BOOL wasRunning = child.runningInActiveScene;
 		child->_pausedAncestors += increment;
-		[node wasRunning:wasRunning];
+		[child wasRunning:wasRunning];
 		
 		RecursivelyIncrementPausedAncestors(child, increment);
 	}
@@ -1233,7 +1235,7 @@ RecursivelyIncrementPausedAncestors(CCNode *node, int increment)
     else if (yUnit == CCPositionUnitNormalized) y = position.y * _parent.contentSizeInPoints.height;
     
     // Account for reference corner
-    CCPositionReferenceCorner corner = _positionType.corner;
+    CCPositionReferenceCorner corner = type.corner;
     if (corner == CCPositionReferenceCornerBottomLeft)
     {
         // Nothing needs to be done

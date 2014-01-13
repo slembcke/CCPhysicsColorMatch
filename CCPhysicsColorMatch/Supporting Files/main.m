@@ -2,8 +2,8 @@
 //  main.m
 //  CCPhysicsColorMatch
 //
-//  Created by Scott Lembcke on 12/20/13.
-//  Copyright Howling Moon Software 2013. All rights reserved.
+//  Created by Scott Lembcke on 1/13/14.
+//  Copyright Howling Moon Software 2014. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
