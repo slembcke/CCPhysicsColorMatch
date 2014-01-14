@@ -77,18 +77,22 @@
 	return [[Ball alloc] init];
 }
 
-// If you want to override touch detection. 
+// The default CCNode touch hit testing behavior is to check the touch location against the node's bounding box.
+// Since the balls are round, lets override the hit testing to check if the touch happens within their shape.
 -(BOOL)hitTestWithWorldPos:(CGPoint)pos
 {
 	float radius = self.contentSize.width/2.0;
 	return (ccpDistanceSQ([self convertToNodeSpace:pos], ccp(radius, radius)) < radius*radius);
 }
 
+// When the player taps on a ball, remove it.
 -(void)touchBegan:(UITouch *)touch withEvent:(UIEvent *)event
 {
+	// Use the new scene property to get a reference to the scene and remove the ball from it.
 	ColorMatchScene *scene = (ColorMatchScene *)self.scene;
 	[scene removeBall:self];
 	
+	// Play a noise with some random pitch bending.
 	int half_steps = (arc4random()%(2*4 + 1) - 4);
 	float pitch = pow(2.0f, half_steps/12.0f);
 	[[OALSimpleAudio sharedInstance] playEffect:@"pop.wav" volume:1.0 pitch:pitch pan:0 loop:NO];

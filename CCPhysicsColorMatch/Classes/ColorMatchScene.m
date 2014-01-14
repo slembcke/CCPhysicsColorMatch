@@ -29,6 +29,7 @@
 #import "Ball.h"
 
 
+// I like to put my Z-orders in an enumeration so they are easy to rearrange.
 enum Z_ORDER {
 	Z_BACKGROUND,
 	Z_BALLS,
@@ -61,6 +62,7 @@ enum Z_ORDER {
 -(id)init
 {
 	if((self = [super init])){
+		// We'll do a minimal amount of initialization here. See onEnter for the rest.
 		_balls = [NSMutableArray array];
 	}
 	
@@ -72,29 +74,29 @@ enum Z_ORDER {
 	[super onEnter];
 	
 	// It's a good practice to do as much initialization work as you can in the -onEnter method instead of -init.
-	// This means that you won't have two full scenes in memory at the same time and Cocos2D can manage memory better.
+	// This means that you won't have two full scenes in memory at the same time when changing scenes and Cocos2D can manage memory better.
 	
-	// Load the background sprite
+	// Load the background sprite that goes behind the balls.
 	_background = [CCSprite spriteWithImageNamed:@"Background.png"];
 	_background.anchorPoint = ccp(0, 0);
 	[self addChild:_background z:Z_BACKGROUND];
 	
-	// Load the foregrund sprite.
+	// Load the foregrund sprite that goes over the balls.
 	_foreground = [CCSprite spriteWithImageNamed:@"Foreground.png"];
 	_foreground.anchorPoint = ccp(0, 0);
 	[self addChild:_foreground z:Z_FOREGROUND];
 	
+	// Create the physics node to simulate the physics in.
 	_physics = [CCPhysicsNode node];
 	_physics.gravity = ccp(0, -250);
+	[self addChild:_physics z:Z_BALLS];
 	
 	// You can enable debug drawing if you want CCPhysics to highlight collision shapes for you.
-	_physics.debugDraw = NO;
+//	_physics.debugDraw = YES;
 	
-	// Use the scene as the delegate for collision events.
+	// Use the scene itself as the delegate for collision events.
 	// See the collision methods below.
 	_physics.collisionDelegate = self;
-	
-	[self addChild:_physics z:Z_BALLS];
 	
 	// Make a node to attach the physics body for the "bin" the balls fall into.
 	CCNode *bin = [CCNode node];
@@ -103,9 +105,10 @@ enum Z_ORDER {
 	_binRect = CGRectMake(68, 34, 430, 500);
 	bin.physicsBody = [CCPhysicsBody bodyWithPolylineFromRect:_binRect cornerRadius:0];
 	
-	// To make the bin active, just add it as a child to the CCPhysicsNode.
+	// To make the bin's collision shapes active, just add it as a child to the CCPhysicsNode.
 	[_physics addChild:bin];
 	
+	// Cache the particle effect to avoid stuttering.
 	NSString *path = [[CCFileUtils sharedFileUtils] fullPathFromRelativePath:@"pop.plist"];
 	_popParticles = [NSDictionary dictionaryWithContentsOfFile:path];
 }
@@ -125,8 +128,8 @@ enum Z_ORDER {
 
 //MARK: Collision Delegate Methods
 
-// This method is called each fixed timestep for any two CCPhysicsBodies that both have a collision type of @"red".
-// The names of the last two parameters decide what collision types it works on.
+// This method is called each fixedUpdate: for any two CCPhysicsBodies that both have a collision type of @"red".
+// The names of the last two parameters decide what collision types it works on, which in this case are both red.
 -(BOOL)ccPhysicsCollisionPreSolve:(CCPhysicsCollisionPair *)pair red:(Ball *)ballA red:(Ball *)ballB
 {
 	[self markPair:ballA and:ballB];
@@ -150,6 +153,7 @@ enum Z_ORDER {
 }
 
 // The two types don't need to match of course.
+// It could be green/blue or monster/bullet.
 -(BOOL)ccPhysicsCollisionPreSolve:(CCPhysicsCollisionPair *)pair green:(Ball *)ballA green:(Ball *)ballB
 {
 	[self markPair:ballA and:ballB];
@@ -168,13 +172,16 @@ enum Z_ORDER {
 	return YES;
 }
 
-// This is the method that is called every time Chipmunk detects a collision between two like color balls.
+// This is the method that is called from all of the collision delegate methods above.
+// So it's called each fixedUpdate: for each pair of colliding balls that are the same color.
+// Once all of the pairs have been marked with this method, you'll be able to find out what group the balls are in.
+// See the fixedUpdate: method for more information.
 -(void)markPair:(Ball *)ballA and:(Ball *)ballB
 {
 	// This is half of the implementation of the disjoint set forest algorithm.
 	// The other half is in the Ball.component* properties.
 	// I won't further explain the algorithm here, but it's one of my favorites.
-	// I use it within Chipmunk itself to find groups of sleeping objects.
+	// I use it within Chipmunk to find groups of sleeping objects.
 	// You can find more information here: http://en.wikipedia.org/wiki/Disjoint_set_forest#Disjoint-set_forests
 	
 	Ball *rootA = ballA.componentRoot;
@@ -195,11 +202,12 @@ enum Z_ORDER {
 // Ex: updating sprites, animating things for rendering, etc.
 -(void)update:(CCTime)delta
 {
-	// Don't actually have anything to put here. It's just here as an example.
+	// Don't actually have anything to put here... It's just here as an example.
 }
 
 // Put stuff here like that you want Cocos2D to call at a consistent rate.
 // Ex: Game logic, physics code, etc.
+// The physics engine updates itself after all other fixedUpdate: methods are calle.d
 -(void)fixedUpdate:(CCTime)delta
 {
 	// First, let's check for groups of 4 or more like colored balls.
@@ -215,18 +223,18 @@ enum Z_ORDER {
 		if(root.componentCount >= 4){
 			[self removeBall:ball];
 			
-			// Play a pop noise.
+			// Play a pop noise with a little random pitch bending.
 			int half_steps = (arc4random()%(2*4 + 1) - 4);
 			float pitch = pow(2.0f, half_steps/12.0f);
 			[[OALSimpleAudio sharedInstance] playEffect:@"ploop.wav" volume:1.0 pitch:pitch pan:0 loop:NO];
 		}
 	}
 	
-	// Add a ball every 6 ticks if the playfield doesn't have enough balls.
+	// Add a ball every 6 ticks if the playfield doesn't have enough balls in it.
 	if(_ticks%6 == 0 && _balls.count < 100){
 		Ball *ball = [Ball node];
 		
-		// Give it a random starting position.
+		// Give the ball a random starting position.
 		float xmin = CGRectGetMinX(_binRect);
 		float xmax = CGRectGetMaxY(_binRect);
 		float rand = 0.8*CCRANDOM_MINUS1_1();
@@ -238,7 +246,7 @@ enum Z_ORDER {
 		[_physics addChild:ball];
 	}
 	
-	// Reset the component properties
+	// Reset the component properties so they are ready to be used again when the collision delegate methods are called.
 	for(Ball *ball in _balls){
 		ball.componentCount = 1;
 		ball.componentRoot = ball;

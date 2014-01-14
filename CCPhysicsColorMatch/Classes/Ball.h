@@ -27,7 +27,7 @@
 @interface Ball : CCSprite
 
 // Properties used when finding matched groups of balls.
-// See ColorMatchScene.m for how these are used.
+// See ColorMatchScene.m for more information about how these are used.
 @property(nonatomic, weak) Ball *componentRoot;
 @property(nonatomic, assign) int componentCount;
 

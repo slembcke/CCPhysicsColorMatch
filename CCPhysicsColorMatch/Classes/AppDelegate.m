@@ -39,14 +39,12 @@
 		// On iPhone 5 you see the middle 568x320 of it.
 		// On iPad you see the middle 512x384 of that. (It sets the iPad's content scale to 2 or 4 for retina)
 		CCSetupScreenMode: CCScreenModeFixed,
-		// Don't show the stats (fps, draw call count, etc) counter.
-		CCSetupHideDebugStats: @YES,
-		// Use a fast fixed update interval for higher quality physics.
-		CCSetupFixudUpdateInterval: @(1.0/60.0),
 		
-		// Examples of other settings you can use. See CCAppDelegate.h for the full list.
-//		CCSetupScreenOrientation: CCScreenOrientationPortrait,
-//		CCSetupTabletScale2X: @YES,
+		// Use a fast fixed update interval for higher quality physics.
+		CCSetupFixedUpdateInterval: @(1.0/60.0),
+		
+		// Uncomment this if you want to see the FPS counter.
+//		CCSetupShowDebugStats: @YES,
 	}];
 	
 	return YES;

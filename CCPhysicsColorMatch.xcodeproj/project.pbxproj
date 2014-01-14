@@ -1570,12 +1570,12 @@
 		D36AF2D41884A0A4003D24B6 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				D36AF3031884A328003D24B6 /* Ball.h */,
-				D36AF3041884A328003D24B6 /* Ball.m */,
-				D36AF3051884A328003D24B6 /* ColorMatchScene.h */,
-				D36AF3061884A328003D24B6 /* ColorMatchScene.m */,
 				D36AF2D51884A0A4003D24B6 /* AppDelegate.h */,
 				D36AF2D61884A0A4003D24B6 /* AppDelegate.m */,
+				D36AF3051884A328003D24B6 /* ColorMatchScene.h */,
+				D36AF3061884A328003D24B6 /* ColorMatchScene.m */,
+				D36AF3031884A328003D24B6 /* Ball.h */,
+				D36AF3041884A328003D24B6 /* Ball.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
