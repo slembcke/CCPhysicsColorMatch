@@ -222,6 +222,14 @@
 		D36AF31E1884A42D003D24B6 /* pop.plist in Resources */ = {isa = PBXBuildFile; fileRef = D36AF31A1884A42D003D24B6 /* pop.plist */; };
 		D36AF31F1884A42D003D24B6 /* pop.wav in Resources */ = {isa = PBXBuildFile; fileRef = D36AF31B1884A42D003D24B6 /* pop.wav */; };
 		D36AF3201884A42D003D24B6 /* thump.wav in Resources */ = {isa = PBXBuildFile; fileRef = D36AF31C1884A42D003D24B6 /* thump.wav */; };
+		D3B05DF0188ED38B00613617 /* Background.png in Resources */ = {isa = PBXBuildFile; fileRef = D3B05DE8188ED38B00613617 /* Background.png */; };
+		D3B05DF1188ED38B00613617 /* Ball_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = D3B05DE9188ED38B00613617 /* Ball_blue.png */; };
+		D3B05DF2188ED38B00613617 /* Ball_green.png in Resources */ = {isa = PBXBuildFile; fileRef = D3B05DEA188ED38B00613617 /* Ball_green.png */; };
+		D3B05DF3188ED38B00613617 /* Ball_orange.png in Resources */ = {isa = PBXBuildFile; fileRef = D3B05DEB188ED38B00613617 /* Ball_orange.png */; };
+		D3B05DF4188ED38B00613617 /* Ball_red.png in Resources */ = {isa = PBXBuildFile; fileRef = D3B05DEC188ED38B00613617 /* Ball_red.png */; };
+		D3B05DF5188ED38B00613617 /* Ball_violet.png in Resources */ = {isa = PBXBuildFile; fileRef = D3B05DED188ED38B00613617 /* Ball_violet.png */; };
+		D3B05DF6188ED38B00613617 /* Ball_yellow.png in Resources */ = {isa = PBXBuildFile; fileRef = D3B05DEE188ED38B00613617 /* Ball_yellow.png */; };
+		D3B05DF7188ED38B00613617 /* Foreground.png in Resources */ = {isa = PBXBuildFile; fileRef = D3B05DEF188ED38B00613617 /* Foreground.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -673,6 +681,14 @@
 		D36AF31A1884A42D003D24B6 /* pop.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = pop.plist; path = Resources/pop.plist; sourceTree = "<group>"; };
 		D36AF31B1884A42D003D24B6 /* pop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = pop.wav; path = Resources/pop.wav; sourceTree = "<group>"; };
 		D36AF31C1884A42D003D24B6 /* thump.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = thump.wav; path = Resources/thump.wav; sourceTree = "<group>"; };
+		D3B05DE8188ED38B00613617 /* Background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Background.png; path = Resources/Background.png; sourceTree = "<group>"; };
+		D3B05DE9188ED38B00613617 /* Ball_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Ball_blue.png; path = Resources/Ball_blue.png; sourceTree = "<group>"; };
+		D3B05DEA188ED38B00613617 /* Ball_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Ball_green.png; path = Resources/Ball_green.png; sourceTree = "<group>"; };
+		D3B05DEB188ED38B00613617 /* Ball_orange.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Ball_orange.png; path = Resources/Ball_orange.png; sourceTree = "<group>"; };
+		D3B05DEC188ED38B00613617 /* Ball_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Ball_red.png; path = Resources/Ball_red.png; sourceTree = "<group>"; };
+		D3B05DED188ED38B00613617 /* Ball_violet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Ball_violet.png; path = Resources/Ball_violet.png; sourceTree = "<group>"; };
+		D3B05DEE188ED38B00613617 /* Ball_yellow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Ball_yellow.png; path = Resources/Ball_yellow.png; sourceTree = "<group>"; };
+		D3B05DEF188ED38B00613617 /* Foreground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Foreground.png; path = Resources/Foreground.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -744,6 +760,14 @@
 		D36AF0461884A0A1003D24B6 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D3B05DE8188ED38B00613617 /* Background.png */,
+				D3B05DE9188ED38B00613617 /* Ball_blue.png */,
+				D3B05DEA188ED38B00613617 /* Ball_green.png */,
+				D3B05DEB188ED38B00613617 /* Ball_orange.png */,
+				D3B05DEC188ED38B00613617 /* Ball_red.png */,
+				D3B05DED188ED38B00613617 /* Ball_violet.png */,
+				D3B05DEE188ED38B00613617 /* Ball_yellow.png */,
+				D3B05DEF188ED38B00613617 /* Foreground.png */,
 				D36AF3191884A42D003D24B6 /* ploop.wav */,
 				D36AF31A1884A42D003D24B6 /* pop.plist */,
 				D36AF31B1884A42D003D24B6 /* pop.wav */,
@@ -1655,6 +1679,7 @@
 				D36AF3141884A3E7003D24B6 /* Ball_orange-hd.png in Resources */,
 				D36AF0531884A0A1003D24B6 /* Icon@2x.png in Resources */,
 				D36AF0651884A0A2003D24B6 /* Icon-Small@2x.png in Resources */,
+				D3B05DF5188ED38B00613617 /* Ball_violet.png in Resources */,
 				D36AF0571884A0A1003D24B6 /* Icon-72@2x.png in Resources */,
 				D36AF3151884A3E7003D24B6 /* Ball_red-hd.png in Resources */,
 				D36AF0481884A0A1003D24B6 /* Default.png in Resources */,
@@ -1662,14 +1687,19 @@
 				D36AF05F1884A0A1003D24B6 /* Icon-iPad-Spotlight-iOS7@2x.png in Resources */,
 				D36AF04E1884A0A1003D24B6 /* Default-Landscape~ipad.png in Resources */,
 				D36AF0631884A0A1003D24B6 /* Icon-Small.png in Resources */,
+				D3B05DF4188ED38B00613617 /* Ball_red.png in Resources */,
 				D36AF0611884A0A1003D24B6 /* Icon-Small-50.png in Resources */,
+				D3B05DF6188ED38B00613617 /* Ball_yellow.png in Resources */,
+				D3B05DF2188ED38B00613617 /* Ball_green.png in Resources */,
 				D36AF24A1884A0A3003D24B6 /* LICENSE_Kazmath.txt in Resources */,
 				D36AF3121884A3E7003D24B6 /* Ball_blue-hd.png in Resources */,
+				D3B05DF0188ED38B00613617 /* Background.png in Resources */,
 				D36AF0551884A0A1003D24B6 /* Icon-72.png in Resources */,
 				D36AF31E1884A42D003D24B6 /* pop.plist in Resources */,
 				D36AF1A31884A0A3003D24B6 /* LICENSE_cocos2d.txt in Resources */,
 				D36AF04C1884A0A1003D24B6 /* Default-568h@2x.png in Resources */,
 				D36AF31F1884A42D003D24B6 /* pop.wav in Resources */,
+				D3B05DF3188ED38B00613617 /* Ball_orange.png in Resources */,
 				D36AF3181884A3E7003D24B6 /* Foreground-hd.png in Resources */,
 				D36AF0671884A0A2003D24B6 /* Icon-Spotlight-iOS7.png in Resources */,
 				D36AF05B1884A0A1003D24B6 /* Icon-76@2x.png in Resources */,
@@ -1678,9 +1708,11 @@
 				D36AF0691884A0A2003D24B6 /* Icon-Spotlight-iOS7@2x.png in Resources */,
 				D36AF31D1884A42D003D24B6 /* ploop.wav in Resources */,
 				D36AF0591884A0A1003D24B6 /* Icon-76.png in Resources */,
+				D3B05DF7188ED38B00613617 /* Foreground.png in Resources */,
 				D36AF3171884A3E7003D24B6 /* Ball_yellow-hd.png in Resources */,
 				D36AF3201884A42D003D24B6 /* thump.wav in Resources */,
 				D36AF3131884A3E7003D24B6 /* Ball_green-hd.png in Resources */,
+				D3B05DF1188ED38B00613617 /* Ball_blue.png in Resources */,
 				D36AF22F1884A0A3003D24B6 /* ChangeLog in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
